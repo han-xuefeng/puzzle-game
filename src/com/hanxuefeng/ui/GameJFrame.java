@@ -1,29 +1,48 @@
 package com.hanxuefeng.ui;
 
 import javax.swing.*;
+import java.util.Random;
 
 public class GameJFrame extends JFrame {
 
+    private int[][] data = new int[4][4];
     public GameJFrame(){
         initJFrame();
 
         initJMenuBar();
+
+        initData();
 
         initImage();
 
         this.setVisible(true);
     }
 
+    private void initData() {
+        int[] tmpArr = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+
+        Random random = new Random();
+        // 打乱数组
+        for (int i = 0; i < tmpArr.length; i++) {
+            int index = random.nextInt(tmpArr.length);
+
+            int tmp = tmpArr[i];
+            tmpArr[i] = tmpArr[index];
+            tmpArr[index] = tmp;
+        }
+        for (int i = 0; i < tmpArr.length; i++) {
+            data[i / 4][i % 4] = tmpArr[i];
+        }
+    }
+
     private void initImage() {
-        int number = 1;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ImageIcon imageIcon = new ImageIcon("D:\\work\\code\\java\\project\\puzzle-game\\image\\animal\\animal3\\"+number+".jpg");
+                ImageIcon imageIcon = new ImageIcon("D:\\work\\code\\java\\project\\puzzle-game\\image\\animal\\animal3\\"+this.data[i][j]+".jpg");
                 // 2. 创建一个jLabel
                 JLabel jLabel = new JLabel(imageIcon);
                 jLabel.setBounds(105 * j, 105 * i, 105, 105);
                 this.add(jLabel);
-                number++;
             }
         }
 
