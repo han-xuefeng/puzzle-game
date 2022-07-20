@@ -9,7 +9,25 @@ public class GameJFrame extends JFrame {
 
         initJMenuBar();
 
+        initImage();
+
         this.setVisible(true);
+    }
+
+    private void initImage() {
+        int number = 1;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                ImageIcon imageIcon = new ImageIcon("D:\\work\\code\\java\\project\\puzzle-game\\image\\animal\\animal3\\"+number+".jpg");
+                // 2. 创建一个jLabel
+                JLabel jLabel = new JLabel(imageIcon);
+                jLabel.setBounds(105 * j, 105 * i, 105, 105);
+                this.add(jLabel);
+                number++;
+            }
+        }
+
+        this.getContentPane().setLayout(null);
     }
 
     private void initJMenuBar() {
@@ -42,8 +60,14 @@ public class GameJFrame extends JFrame {
         // 设置标题
         this.setTitle("拼图游戏单机版 v1.0");
         // 设置置顶
-        this.setAlwaysOnTop(true);
+//        this.setAlwaysOnTop(true);
+        // 设置关闭方式
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // 设置居中显示
         this.setLocationRelativeTo(null);
+        // 取消默认的居中方式
+        this.setLayout(null);
+
+
     }
 }
