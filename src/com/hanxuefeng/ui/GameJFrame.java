@@ -4,11 +4,16 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class GameJFrame extends JFrame {
+public class GameJFrame extends JFrame implements KeyListener {
 
     private int[][] data = new int[4][4];
+
+    private int x = 0;
+    private int y = 0;
     public GameJFrame(){
         initJFrame();
 
@@ -34,11 +39,17 @@ public class GameJFrame extends JFrame {
             tmpArr[index] = tmp;
         }
         for (int i = 0; i < tmpArr.length; i++) {
+            if (tmpArr[i] == 0) {
+                x = i / 4;
+                y = i % 4;
+            }
             data[i / 4][i % 4] = tmpArr[i];
         }
     }
 
     private void initImage() {
+        // 情况原本已经出现的图片
+        this.getContentPane().removeAll();
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -57,6 +68,7 @@ public class GameJFrame extends JFrame {
         this.getContentPane().add(bgJLabel);
 
         this.getContentPane().setLayout(null);
+        this.getContentPane().repaint();
     }
 
     private void initJMenuBar() {
@@ -97,6 +109,59 @@ public class GameJFrame extends JFrame {
         // 取消默认的居中方式
         this.setLayout(null);
 
+        //添加键盘事件
+        this.addKeyListener(this);
 
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        switch (code) {
+            case 37: // 左
+                if (y + 1 == 4) {
+                    return;
+                }
+                data[x][y] = data[x][y+1];
+                data[x][y+1] = 0;
+                y++;
+                break;
+            case 38: // 上
+                if (x + 1 == 4) {
+                    return;
+                }
+                data[x][y] = data[x+1][y];
+                data[x+1][y] = 0;
+                x++;
+                break;
+            case 39: // 右
+                if (y - 1 == -1) {
+                    return;
+                }
+                data[x][y] = data[x][y-1];
+                data[x][y-1] = 0;
+                y--;
+                break;
+            case 40: // 下
+                if (x - 1 == -1) {
+                    return;
+                }
+                data[x][y] = data[x-1][y];
+                data[x-1][y] = 0;
+                x--;
+                break;
+        }
+        initImage();
     }
 }
