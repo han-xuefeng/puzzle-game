@@ -1,6 +1,9 @@
 package com.hanxuefeng.ui;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.util.Random;
 
 public class GameJFrame extends JFrame {
@@ -36,15 +39,22 @@ public class GameJFrame extends JFrame {
     }
 
     private void initImage() {
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ImageIcon imageIcon = new ImageIcon("D:\\work\\code\\java\\project\\puzzle-game\\image\\animal\\animal3\\"+this.data[i][j]+".jpg");
+                ImageIcon imageIcon = new ImageIcon("image\\animal\\animal3\\"+this.data[i][j]+".jpg");
                 // 2. 创建一个jLabel
                 JLabel jLabel = new JLabel(imageIcon);
-                jLabel.setBounds(105 * j, 105 * i, 105, 105);
-                this.add(jLabel);
+                jLabel.setBounds(105 * j + 83, 105 * i + 134, 105, 105);
+                jLabel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+                this.getContentPane().add(jLabel);
             }
         }
+
+        ImageIcon bg = new ImageIcon("image\\background.png");
+        JLabel bgJLabel = new JLabel(bg);
+        bgJLabel.setBounds(40,40, 508, 560);
+        this.getContentPane().add(bgJLabel);
 
         this.getContentPane().setLayout(null);
     }
