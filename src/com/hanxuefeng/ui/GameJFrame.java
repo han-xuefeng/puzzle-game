@@ -14,6 +14,8 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     private int x = 0;
     private int y = 0;
+
+    private String path = "image\\animal\\animal3\\";
     public GameJFrame(){
         initJFrame();
 
@@ -53,7 +55,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ImageIcon imageIcon = new ImageIcon("image\\animal\\animal3\\"+this.data[i][j]+".jpg");
+                ImageIcon imageIcon = new ImageIcon(path + this.data[i][j]+".jpg");
                 // 2. 创建一个jLabel
                 JLabel jLabel = new JLabel(imageIcon);
                 jLabel.setBounds(105 * j + 83, 105 * i + 134, 105, 105);
@@ -129,7 +131,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         int code = e.getKeyCode();
         if (code == 65) {
             this.getContentPane().removeAll();
-            JLabel jLabel = new JLabel(new ImageIcon("image/animal/animal3/all.jpg"));
+            JLabel jLabel = new JLabel(new ImageIcon(path + "all.jpg"));
             jLabel.setBounds(83, 134, 420, 420);
             this.getContentPane().add(jLabel);
             initBackground();
