@@ -62,13 +62,17 @@ public class GameJFrame extends JFrame implements KeyListener {
             }
         }
 
+        initBackground();
+
+        this.getContentPane().setLayout(null);
+        this.getContentPane().repaint();
+    }
+
+    private void initBackground() {
         ImageIcon bg = new ImageIcon("image\\background.png");
         JLabel bgJLabel = new JLabel(bg);
         bgJLabel.setBounds(40,40, 508, 560);
         this.getContentPane().add(bgJLabel);
-
-        this.getContentPane().setLayout(null);
-        this.getContentPane().repaint();
     }
 
     private void initJMenuBar() {
@@ -122,7 +126,15 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        int code = e.getKeyCode();
+        if (code == 65) {
+            this.getContentPane().removeAll();
+            JLabel jLabel = new JLabel(new ImageIcon("image/animal/animal3/all.jpg"));
+            jLabel.setBounds(83, 134, 420, 420);
+            this.getContentPane().add(jLabel);
+            initBackground();
+            this.getContentPane().repaint();
+        }
     }
 
     @Override
