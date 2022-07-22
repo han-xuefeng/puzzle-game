@@ -2,8 +2,6 @@ package com.hanxuefeng.ui;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
@@ -52,6 +50,12 @@ public class GameJFrame extends JFrame implements KeyListener {
     private void initImage() {
         // 情况原本已经出现的图片
         this.getContentPane().removeAll();
+        if (victory()) {
+            System.out.println("胜利");
+            JLabel vJLabel = new JLabel(new ImageIcon("image\\win.png"));
+            vJLabel.setBounds(203,240, 197,73);
+            this.getContentPane().add(vJLabel);
+        }
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -128,6 +132,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (victory()) {
+            return;
+        }
         int code = e.getKeyCode();
         if (code == 65) {
             this.getContentPane().removeAll();
@@ -141,6 +148,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (victory()) {
+            return;
+        }
         int code = e.getKeyCode();
         switch (code) {
             case 37: // 左
@@ -185,5 +195,22 @@ public class GameJFrame extends JFrame implements KeyListener {
                 break;
         }
         initImage();
+    }
+
+    public boolean victory() {
+        int[][] tmpData = new int[][]{
+                {1,2,3,4},
+                {5,6,7,8},
+                {9,10,11,12},
+                {13,14,15,0}
+        };
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                if (data[i][j] != tmpData[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
