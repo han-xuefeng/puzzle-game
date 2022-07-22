@@ -2,6 +2,8 @@ package com.hanxuefeng.ui;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
@@ -90,6 +92,14 @@ public class GameJFrame extends JFrame implements KeyListener {
 
         // 子菜单
         JMenuItem rePlayJMenuItem = new JMenuItem("重新游戏");
+        rePlayJMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                data = new int[4][4];
+                initData();
+                initImage();
+            }
+        });
         JMenuItem reLoginJMenuItem = new JMenuItem("重新登录");
         JMenuItem closeGameJMenuItem = new JMenuItem("关闭游戏");
         JMenuItem accountJMenuItem = new JMenuItem("公众号");
