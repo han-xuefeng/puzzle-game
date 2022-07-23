@@ -8,15 +8,36 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class GameJFrame extends JFrame implements KeyListener {
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
     private int[][] data = new int[4][4];
+
+    private int[] girl = new int[12];
+    private int[] animal = new int[7];
+    private int[] sport = new int[9];
+
 
     private int x = 0;
     private int y = 0;
 
-    private String path = "image\\animal\\animal3\\";
+    // 定义变量 用来统计步数
+    private int step = 0;
+
+    private String pathType = "animal\\animal3\\";
+    private static final String path = "image\\";
+
+    // 子菜单
+    private JMenu changeImageJMenuItem = new JMenu("更换图片");
+    private JMenuItem girlJMenuItem = new JMenuItem("美女");
+    private JMenuItem animalJMenuItem = new JMenuItem("动物");
+    private JMenuItem sportJMenuItem = new JMenuItem("运动");
+    private JMenuItem rePlayJMenuItem = new JMenuItem("重新游戏");
+    private JMenuItem reLoginJMenuItem = new JMenuItem("重新登录");
+    private JMenuItem closeGameJMenuItem = new JMenuItem("关闭游戏");
+    private JMenuItem accountJMenuItem = new JMenuItem("公众号");
+
     public GameJFrame(){
+        initImageData();
         initJFrame();
 
         initJMenuBar();
@@ -53,15 +74,19 @@ public class GameJFrame extends JFrame implements KeyListener {
         // 情况原本已经出现的图片
         this.getContentPane().removeAll();
         if (victory()) {
-            System.out.println("胜利");
             JLabel vJLabel = new JLabel(new ImageIcon("image\\win.png"));
             vJLabel.setBounds(203,240, 197,73);
             this.getContentPane().add(vJLabel);
         }
 
+        JLabel stepCountJLabel = new JLabel("步数：" + step);
+        stepCountJLabel.setBounds(50, 30, 100, 20);
+        this.getContentPane().add(stepCountJLabel);
+
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                ImageIcon imageIcon = new ImageIcon(path + this.data[i][j]+".jpg");
+                ImageIcon imageIcon = new ImageIcon(path  + pathType + this.data[i][j]+".jpg");
                 // 2. 创建一个jLabel
                 JLabel jLabel = new JLabel(imageIcon);
                 jLabel.setBounds(105 * j + 83, 105 * i + 134, 105, 105);
@@ -90,23 +115,25 @@ public class GameJFrame extends JFrame implements KeyListener {
         JMenu functionJMenu = new JMenu("功能");
         JMenu aboutJMenu = new JMenu("关于我们");
 
-        // 子菜单
-        JMenuItem rePlayJMenuItem = new JMenuItem("重新游戏");
-        rePlayJMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                data = new int[4][4];
-                initData();
-                initImage();
-            }
-        });
-        JMenuItem reLoginJMenuItem = new JMenuItem("重新登录");
-        JMenuItem closeGameJMenuItem = new JMenuItem("关闭游戏");
-        JMenuItem accountJMenuItem = new JMenuItem("公众号");
+        // 添加事件
+        rePlayJMenuItem.addActionListener(this);
+        reLoginJMenuItem.addActionListener(this);
+        closeGameJMenuItem.addActionListener(this);
+        accountJMenuItem.addActionListener(this);
 
+        girlJMenuItem.addActionListener(this);
+        animalJMenuItem.addActionListener(this);
+        sportJMenuItem.addActionListener(this);
+
+        changeImageJMenuItem.add(girlJMenuItem);
+        changeImageJMenuItem.add(animalJMenuItem);
+        changeImageJMenuItem.add(sportJMenuItem);
+
+        functionJMenu.add(changeImageJMenuItem);
         functionJMenu.add(rePlayJMenuItem);
         functionJMenu.add(reLoginJMenuItem);
         functionJMenu.add(closeGameJMenuItem);
+
         aboutJMenu.add(accountJMenuItem);
 
         jMenuBar.add(functionJMenu);
@@ -135,6 +162,18 @@ public class GameJFrame extends JFrame implements KeyListener {
 
     }
 
+    private void initImageData() {
+        for (int i = 0; i < 12; i++) {
+            girl[i] = i+1;
+        }
+        for (int i = 0; i < 9; i++) {
+            sport[i] = i+1;
+        }
+        for (int i = 0; i < 7; i++) {
+            animal[i] = i+1;
+        }
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -148,7 +187,7 @@ public class GameJFrame extends JFrame implements KeyListener {
         int code = e.getKeyCode();
         if (code == 65) {
             this.getContentPane().removeAll();
-            JLabel jLabel = new JLabel(new ImageIcon(path + "all.jpg"));
+            JLabel jLabel = new JLabel(new ImageIcon(path + pathType + "all.jpg"));
             jLabel.setBounds(83, 134, 420, 420);
             this.getContentPane().add(jLabel);
             initBackground();
@@ -170,6 +209,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 data[x][y] = data[x][y+1];
                 data[x][y+1] = 0;
                 y++;
+                step++;
                 break;
             case 38: // 上
                 if (x + 1 == 4) {
@@ -178,6 +218,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 data[x][y] = data[x+1][y];
                 data[x+1][y] = 0;
                 x++;
+                step++;
                 break;
             case 39: // 右
                 if (y - 1 == -1) {
@@ -186,6 +227,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 data[x][y] = data[x][y-1];
                 data[x][y-1] = 0;
                 y--;
+                step++;
                 break;
             case 40: // 下
                 if (x - 1 == -1) {
@@ -194,6 +236,7 @@ public class GameJFrame extends JFrame implements KeyListener {
                 data[x][y] = data[x-1][y];
                 data[x-1][y] = 0;
                 x--;
+                step++;
                 break;
             case 87:
                 data = new int[][]{
@@ -222,5 +265,55 @@ public class GameJFrame extends JFrame implements KeyListener {
             }
         }
         return true;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
+        if (obj == rePlayJMenuItem) {
+            step = 0;
+            initData();
+            initImage();
+        } else if (obj == reLoginJMenuItem) {
+            this.setVisible(false);
+            new LoginJFrame();
+        } else if (obj == closeGameJMenuItem) {
+            System.exit(0);
+        } else if (obj == accountJMenuItem) {
+            JDialog jDialog = new JDialog();
+
+            JLabel jLabel = new JLabel(new ImageIcon("image/about.png"));
+            jLabel.setBounds(0, 0, 258, 258);
+            jDialog.getContentPane().add(jLabel);
+            jDialog.setSize(344, 344);
+            jDialog.setAlwaysOnTop(true);
+            jDialog.setLocationRelativeTo(null);
+            jDialog.setModal(true);
+            jDialog.setVisible(true);
+        } else if (obj == girlJMenuItem) {
+            changeImage(1);
+        } else if (obj == animalJMenuItem) {
+            changeImage(2);
+        } else if (obj == sportJMenuItem) {
+            changeImage(3);
+        }
+    }
+
+    private void changeImage(int type) {
+
+        Random random = new Random();
+        if (type == 1) {
+            int i = random.nextInt(girl.length);
+            pathType =  "girl\\" + "girl" +girl[i] + "\\";
+        } else if (type ==2) {
+            int i = random.nextInt(animal.length);
+            pathType =  "animal\\" + "animal" +animal[i] + "\\";
+        } else {
+            int i = random.nextInt(sport.length);
+            pathType =  "sport\\" + "sport" +sport[i] + "\\";
+        }
+        step = 0;
+        initData();
+        initImage();
     }
 }
